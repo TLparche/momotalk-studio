@@ -1,0 +1,289 @@
+@function zoom-int($value) {
+    // calc()在<integer>期望的地方会向上取整，导致导出图片时文字宽度溢出
+    // 可能有更好的做法，这里暂时粗暴的向下-1px
+    // calc() may round up where <integer> expects, causing the text width to overflow when the image is exported
+    // There may be a better way to do it, here for the time being -1px
+    @return calc(var(--zoom) * $value - 1px);
+}
+
+@function zoom($value) {
+    @return calc(var(--zoom) * $value);
+}
+
+.student {
+    display: grid;
+    grid-template-columns: zoom(56px) zoom(10px) 1fr;
+
+    padding: 0 zoom(30px) 0 zoom(18px);
+
+    .student--split {
+        grid-area: 1 / 1 / 3 / 2;
+    }
+    .avatar {
+        grid-area: 1 / 1 / 3 / 2;
+
+        img {
+            margin-top: zoom(5px);
+            @include circle(zoom(56px));
+        }
+    }
+
+    .name {
+        grid-area: 1 / 3 / 2 / 3;
+        @include font-light(zoom-int(20px)); // regular firefox下载时无法正常显示「星野」
+        color: $font-black;
+        user-select: none;
+        width: fit-content;
+    }
+
+    .container {
+        grid-area: 2 / 3 / 2 / 3;
+        display: flex;
+        .box {
+            background: $grey;
+            white-space: pre-wrap;
+            @include font-regular(zoom-int(20px));
+        }
+    }
+
+    &.first {
+        grid-template-rows: zoom(35px) 1fr;
+        margin-top: zoom(10px);
+        .box:not(.img):before {
+            border-color: transparent $grey transparent transparent;
+            border-style: solid;
+            border-width: 6px;
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: zoom(10px);
+        }
+    }
+    .action-block {
+        grid-area: 2 / 3 / 2 / 3;
+    }
+}
+
+.sensei {
+    padding: 0 zoom(18px) 0 zoom(30px);
+
+    .container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    &.first {
+        margin-top: zoom(10px);
+        .box:not(.img):before {
+            border-color: transparent transparent transparent #4a8ac6;
+            border-style: solid;
+            border-width: 6px;
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: zoom(10px);
+        }
+    }
+    .box {
+        background: #4a8ac6;
+        white-space: pre-wrap;
+        @include font-regular(zoom-int(20px));
+    }
+}
+
+.choice {
+    margin: zoom(5px) 25px zoom(5px) zoom(45px);
+
+    .container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+    }
+
+    .box-choice {
+        grid-area: 1 / 2 / 2 / 3;
+        position: relative;
+        width: 100%;
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        border: 1px solid $chatborder-color;
+        background: url('/reply.png') no-repeat right top, #f3f7f8;
+        background-size: 260px;
+
+        .header {
+            border-bottom: 1px solid $font-grey;
+            margin: zoom(10px) zoom(20px);
+
+            .title {
+                @include font-regular(zoom-int(20px));
+                color: $font-black;
+                border-left: 4px $blue solid;
+                display: inline;
+                padding: 0 zoom(8px);
+            }
+        }
+
+        .content {
+            @include center;
+            flex-direction: column;
+
+            span {
+                width: 90%;
+                span {
+                    background-color: white;
+                    border: none;
+                    color: $font-black;
+                    margin-bottom: 10px;
+                    padding: 5px;
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 10px;
+                    box-shadow: 0 zoom(2px) zoom(5px) #0000003d;
+                    @include font-regular(zoom-int(20px));
+                }
+            }
+        }
+    }
+}
+
+.story {
+    @extend .choice;
+
+    .box-story {
+        @extend .box-choice;
+        border: 1px solid $chatborder-color;
+        background: url('/story.png') no-repeat right top, #ffedf1;
+        background-size: 140px;
+
+        .header .title {
+            border-left: 4px $pink solid;
+        }
+
+        .content span {
+            background-color: $pink;
+            color: white;
+            border: none;
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 90%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0 zoom(2px) zoom(5px) #0000003d;
+            @include font-regular(zoom-int(20px));
+            white-space: pre-wrap;
+        }
+    }
+}
+
+.message {
+    .container {
+        width: 100%;
+        @include center;
+    }
+
+    div {
+        width: 100%;
+        height: fit-content;
+    }
+    .box-message {
+        margin: zoom(5px) zoom(10px) zoom(5px) 50px;
+        display: flex;
+        flex-direction: column;
+        background-color: $list-active-color;
+        border-radius: 10px;
+
+        .content {
+            @include center;
+            @include font-regular(zoom-int(20px));
+            color: $font-black;
+            span{
+                text-align: center;
+                white-space: pre-wrap;
+            }
+        }
+    }
+}
+
+.chat-img {
+    max-width: 100%;
+    max-height: zoom(200px);
+    width: auto;
+}
+
+.box {
+    position: relative;
+    padding: 5px 10px;
+    color: #ecf2fb;
+    @include font-regular(zoom-int(20px));
+    border-radius: 8px;
+    margin-bottom: 5px;
+    @include center;
+    &.img {
+        background-color: white !important;
+        border: 2px solid $chatborder-color;
+        &::after {
+            border-right: 10px solid transparent !important;
+            border-left: 10px solid transparent !important;
+        }
+    }
+}
+
+.container {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    cursor: pointer;
+}
+
+.action-block {
+    display: flex;
+    flex-direction: column;
+    padding: 0 zoom(10px);
+    color: #000;
+    line-height: zoom(17px);
+    user-select: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    opacity: 0;
+    > span{
+        @include font-regular(zoom-int(20px));
+        text-align: center;
+        margin: 1px;
+    }
+}
+
+.show-action{
+    .box:hover + .action-block,
+    .box-choice:hover + .action-block,
+    .box-story:hover + .action-block,
+    .box-message:hover + .action-block,
+    .action-block:hover {
+        opacity: 1;
+    }
+}
+
+.insert-indicator{
+    @include font-light(15px);
+    border-top: 2px dashed $font-black;
+    width: 100%;
+    height: 7px;
+    grid-area: 3/1/3/4;
+    z-index: 100;
+}
+
+.selected {
+    .box,
+    .box-choice,
+    .box-story,
+    .box-message {
+        outline: 2px solid #7ebdff;
+        outline-offset: 2px;
+    }
+}
