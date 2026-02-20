@@ -180,7 +180,14 @@
                         </template>
                     </Popper>
 
-                    <textarea class="text" placeholder="Aa" v-model="store.text" id="textarea"></textarea>
+                    <textarea
+                        ref="textareaRef"
+                        class="text"
+                        placeholder="Aa"
+                        v-model="store.text"
+                        id="textarea"
+                        @input="onTextInput"
+                    ></textarea>
                     <div class="photo" title="Send an Image">
                         <ImageIcon @click="_image()" class="image icon" />
                     </div>
@@ -215,7 +222,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Popper from 'vue3-popper'
 
@@ -244,6 +251,28 @@ const selected = ref<baseStudent | number>(1)
 const selectedTalkId = ref<number>(-1)
 const librarySearch = ref('')
 const students = ref<studentInfo[]>([])
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
+
+const resizeTextarea = () => {
+    const textarea = textareaRef.value
+    if (!textarea) return
+
+    textarea.style.height = 'auto'
+    const styles = window.getComputedStyle(textarea)
+    const lineHeight = parseFloat(styles.lineHeight) || 28
+    const paddingTop = parseFloat(styles.paddingTop) || 0
+    const paddingBottom = parseFloat(styles.paddingBottom) || 0
+    const borderTop = parseFloat(styles.borderTopWidth) || 0
+    const borderBottom = parseFloat(styles.borderBottomWidth) || 0
+    const maxHeight = lineHeight * 3 + paddingTop + paddingBottom + borderTop + borderBottom
+    const nextHeight = Math.min(textarea.scrollHeight, maxHeight)
+    textarea.style.height = `${nextHeight}px`
+    textarea.style.overflowY = 'hidden'
+}
+
+const onTextInput = () => {
+    resizeTextarea()
+}
 
 const loadStudents = async () => {
     try {
@@ -394,6 +423,14 @@ watch(
     }
 )
 
+watch(
+    () => store.text,
+    async () => {
+        await nextTick()
+        resizeTextarea()
+    }
+)
+
 onMounted(async () => {
     await loadStudents()
     const scrollToBottom = document.getElementById('talkList') as HTMLElement
@@ -409,13 +446,15 @@ onMounted(async () => {
             store.showPlayerDialog = true
         }
     }
-    const textarea = document.querySelector('textarea') as HTMLElement
+    const textarea = textareaRef.value
+    if (!textarea) return
     textarea.onkeydown = (e: KeyboardEvent) => {
         if (!e.shiftKey && e.key === 'Enter') {
             e.preventDefault()
             _text()
         }
     }
+    resizeTextarea()
 })
 </script>
 

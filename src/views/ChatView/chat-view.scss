@@ -262,7 +262,7 @@
 
 .chat-panel {
     display: grid;
-    grid-template-rows: 1fr $chatfooter-height;
+    grid-template-rows: 1fr auto;
     height: 100%;
 }
 
@@ -277,16 +277,20 @@
 
 .add {
     width: 100%;
+    min-height: $chatfooter-height;
 }
 
 $bar-height: calc($chatfooter-height / 2);
 $bar-icon-height: calc($bar-height * 0.67);
 
 .input-bar {
-    height: $bar-height;
+    min-height: $bar-height;
+    height: auto;
     width: 100%;
     background-color: $inputbar-color;
     @include center;
+    align-items: flex-end;
+    padding: 8px 0;
 }
 
 .sticker,
@@ -322,17 +326,20 @@ $bar-icon-height: calc($bar-height * 0.67);
     color: #666;
     padding: 5px 10px;
     margin: 0 8px;
-    height: $bar-icon-height;
+    min-height: $bar-icon-height;
+    height: auto;
+    max-height: calc(28px * 3 + 14px);
     width: 100%;
     line-height: 28px;
     resize: none;
     font-family: sans-serif;
     @include font-light(20px);
-    @include center;
+    display: block;
     background-repeat: no-repeat;
     border: 2px solid #dce5ec;
     border-radius: 20px;
     outline: none;
+    overflow-y: hidden;
 
     &:focus::placeholder {
         opacity: 0;
