@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 20% 80%;
     height: 100%;
+    min-height: 0;
 }
 
 .character-panel {
@@ -261,21 +262,25 @@
 }
 
 .chat-panel {
-    display: grid;
-    grid-template-rows: 1fr auto;
+    display: flex;
+    flex-direction: column;
     height: 100%;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .talk-list {
-    display: flex;
-    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
     width: 100%;
     @include hide-scrollbar;
+    overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
 }
 
 .add {
+    flex: 0 0 auto;
     width: 100%;
     min-height: $chatfooter-height;
 }
