@@ -28,6 +28,13 @@ const changeTheme = () => {
     document.body.className = store.theme + ' ' + fullScreen
     document.body.style.setProperty('--zoom', store.zoom.toString())
 }
+
+const initReset = () => {
+    if (!confirm('Reset to initial defaults? This clears saved chats, selected characters, and settings.'))
+        return
+    store.resetInitData()
+    changeTheme()
+}
 </script>
 
 <template>
@@ -64,6 +71,8 @@ const changeTheme = () => {
                         <h2>{{ $t('draggable') }}</h2>
                         <label class="checkbox"><input type="checkbox" value="false" v-model="store.draggable" 
                             @change="store.setData()"/>{{ $t('disableDrag') }}</label>
+                        <h2>Init Reset</h2>
+                        <button class="danger-reset" @click="initReset">Reset to Initial State</button>
                         
                     </div>
                     <div class="dialog-content">
@@ -184,6 +193,13 @@ const changeTheme = () => {
             margin: 10px 0;
             color: $grey-active;
             background-color: white;
+        }
+
+        &.danger-reset {
+            margin-top: 6px;
+            background: #c95a5a;
+            border-color: #c95a5a;
+            color: white;
         }
     }
 

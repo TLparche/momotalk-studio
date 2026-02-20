@@ -245,6 +245,27 @@ const students = ref<studentInfo[]>([])
 const loadStudents = async () => {
     try {
         students.value = await getStudents(store.language)
+        const studentMap = new Map(students.value.map((student) => [student.Id, student]))
+        let changed = false
+
+        selectList.selectList = selectList.selectList.map((item) => {
+            const matched = studentMap.get(item.Id)
+            if (!matched) return item
+
+            const nextAvatar = matched.Avatars[matched.cnt]
+            const nextFaces = [...matched.Avatars]
+            if (item.Avatar !== nextAvatar || JSON.stringify(item.Faces || []) !== JSON.stringify(nextFaces)) {
+                changed = true
+                return {
+                    ...item,
+                    Avatar: nextAvatar,
+                    Faces: nextFaces
+                }
+            }
+            return item
+        })
+
+        if (changed) selectList.setData()
     } catch (_error) {
         students.value = []
     }

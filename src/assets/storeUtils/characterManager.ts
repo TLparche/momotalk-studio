@@ -52,6 +52,11 @@ export const characterManager = reactive({
     getData() {
         const raw = localStorage.getItem('customCharacters')
         this.characters = raw != null ? JSON.parse(raw) : []
+    },
+
+    resetData() {
+        this.characters = []
+        this.setData()
     }
 })
 

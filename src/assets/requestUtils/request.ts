@@ -36,6 +36,18 @@ const getStickers = async (student: number) => {
 
 const getStudents = async (lng: string) => {
     const tools = {
+        getDefaultAvatarIndex: (avatars: string[]) => {
+            const fandomPngIndex = avatars.findIndex(
+                (url) => url.includes('/Fandom/') && url.toLowerCase().endsWith('.png')
+            )
+            if (fandomPngIndex !== -1) return fandomPngIndex
+
+            const pngIndex = avatars.findIndex((url) => url.toLowerCase().endsWith('.png'))
+            if (pngIndex !== -1) return pngIndex
+
+            return 0
+        },
+
         initStudentObject: (localItem: LocalStudent): studentInfo => ({
             Id: localItem.Id,
             Avatars: proxy(localItem.Avatar),
@@ -49,7 +61,7 @@ const getStudents = async (lng: string) => {
             Star: localItem.Star || 0,
             Released: localItem.Released || false,
             RelatedStudent: [],
-            cnt: 0
+            cnt: tools.getDefaultAvatarIndex(localItem.Avatar)
         }),
 
         fixStudentField: (localItem: LocalStudent, field: 'Name' | 'Bio') => {

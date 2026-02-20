@@ -5,7 +5,7 @@ import { selectList } from './selectList'
 import { characterManager } from './characterManager'
 
 export const store = reactive({
-    language: 'zh',
+    language: 'kr',
     theme: 'momotalk',
     fullScreen: false,
     zoom: 1,
@@ -38,7 +38,7 @@ export const store = reactive({
         characterManager.getData()
         const data = ['language', 'render-theme', 'draggable', 'full-screen', 'zoom']
             .map((x) => localStorage.getItem(x))
-        this.language  = data[0] != null ? JSON.parse(data[0]) : 'zh'
+        this.language  = data[0] != null ? JSON.parse(data[0]) : 'kr'
         i18n.global.locale = this.language as any
         this.theme     = data[1] != null ? JSON.parse(data[1]) : 'momotalk'
         this.draggable = data[2] != null ? JSON.parse(data[2]) : window.matchMedia('(max-width: 1150px)').matches
@@ -50,6 +50,42 @@ export const store = reactive({
     resetData() {
         talkHistory.resetData()
         selectList.resetData()
+        this.setData()
+    },
+    resetInitData() {
+        ;[
+            'talkHistory',
+            'talkId',
+            'selectHistory',
+            'customCharacters',
+            'language',
+            'render-theme',
+            'draggable',
+            'full-screen',
+            'zoom',
+            'chat-background'
+        ].forEach((key) => localStorage.removeItem(key))
+
+        talkHistory.resetData()
+        selectList.resetData()
+        characterManager.resetData()
+
+        this.language = 'kr'
+        i18n.global.locale = 'kr' as any
+        this.theme = 'momotalk'
+        this.draggable = window.matchMedia('(max-width: 1150px)').matches
+        this.fullScreen = false
+        this.zoom = 1
+        this.chatBackground = '#ffffff'
+        this.typing = 0
+        this.text = ''
+        this.insertId = -1
+        this.showPlayerDialog = false
+        this.showSettingDialog = false
+        this.storyKey = '10005'
+        this.storyList = {}
+        this.storyFile = '1000501'
+
         this.setData()
     }
 })
