@@ -66,6 +66,57 @@
     }
 }
 
+.send-as-inline {
+    height: calc($chatfooter-height / 2);
+    background: white;
+    border-top: 1px solid $chatborder-color;
+    padding: 6px 10px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+
+    &__label {
+        @include font-regular(14px);
+        color: $font-grey;
+        white-space: nowrap;
+    }
+
+    .sender-list {
+        margin: 0;
+    }
+
+    .sender-list button {
+        height: 40px;
+    }
+
+    &__selected {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid $chatborder-color;
+        border-radius: 18px;
+        padding: 4px 8px 4px 4px;
+        max-width: 170px;
+        background: #f8fbff;
+
+        img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        span {
+            @include font-light(13px);
+            color: $font-black;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
 .selected-characters {
     display: flex;
     flex-direction: column;
@@ -388,5 +439,16 @@ $bar-icon-height: calc($bar-height * 0.67);
     .character-panel {
         border-right: none;
         border-bottom: 1px solid $chatborder-color;
+    }
+
+    .send-as-inline {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 8px;
+
+        &__selected {
+            max-width: 100%;
+            justify-self: start;
+        }
     }
 }

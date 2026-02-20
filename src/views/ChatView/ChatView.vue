@@ -2,24 +2,6 @@
     <main class="chat-editor">
         <aside class="character-panel">
             <section class="panel-block">
-                <h3>Send As</h3>
-                <div class="sender-list">
-                    <button :class="{ active: selected === 1 }" @click="selectChar(1)" title="Sensei">
-                        <ProfileIcon class="icon profile" />
-                    </button>
-                    <button :class="{ active: selected === 2 }" @click="selectChar(2)" title="Story Event">
-                        <HeartIcon class="heart icon" />
-                    </button>
-                    <button :class="{ active: selected === 3 }" @click="selectChar(3)" title="Reply">
-                        <ChoiceIcon class="choice icon" />
-                    </button>
-                    <button :class="{ active: selected === 4 }" @click="selectChar(4)" title="System Message">
-                        <BellIcon class="heart bell" />
-                    </button>
-                </div>
-            </section>
-
-            <section class="panel-block">
                 <h3>Selected Characters</h3>
                 <div class="selected-characters">
                     <div
@@ -204,6 +186,27 @@
                     </div>
                     <div class="message" title="Send the Message">
                         <SendIcon @click="_text()" class="send icon" />
+                    </div>
+                </div>
+                <div class="send-as-inline">
+                    <span class="send-as-inline__label">Send As</span>
+                    <div class="sender-list">
+                        <button :class="{ active: selected === 1 }" @click="selectChar(1)" title="Sensei">
+                            <ProfileIcon class="icon profile" />
+                        </button>
+                        <button :class="{ active: selected === 2 }" @click="selectChar(2)" title="Story Event">
+                            <HeartIcon class="heart icon" />
+                        </button>
+                        <button :class="{ active: selected === 3 }" @click="selectChar(3)" title="Reply">
+                            <ChoiceIcon class="choice icon" />
+                        </button>
+                        <button :class="{ active: selected === 4 }" @click="selectChar(4)" title="System Message">
+                            <BellIcon class="heart bell" />
+                        </button>
+                    </div>
+                    <div class="send-as-inline__selected" v-if="typeof selected !== 'number'">
+                        <img :src="selected.Avatar" :alt="selected.Name" />
+                        <span>{{ selected.Name }}</span>
                     </div>
                 </div>
             </div>
