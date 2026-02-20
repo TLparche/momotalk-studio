@@ -4,7 +4,7 @@ import katex from 'katex'
 const markdown = new MarkdownIt({
     html: false,
     linkify: true,
-    breaks: true
+    breaks: false
 })
 
 const renderMath = (text: string) => {
@@ -32,14 +32,18 @@ const renderMath = (text: string) => {
     })
 
     const renderedMarkdown = markdown.renderInline(withInlineMath)
-    return renderedMarkdown.replace(/%%MATH_(\d+)%%/g, (_matched: string, index: string) => {
+    const withoutBreakTags = renderedMarkdown.replace(/<br\s*\/?>/gi, '\n')
+    return withoutBreakTags.replace(/%%MATH_(\d+)%%/g, (_matched: string, index: string) => {
         return mathBlocks[Number(index)] || ''
     })
 }
 
 const renderChatText = (text: string) => {
     if (!text) return ''
-    return renderMath(text)
+    const normalized = text
+        .replace(/\r\n/g, '\n')
+        .replace(/\n+$/g, '')
+    return renderMath(normalized)
 }
 
 export { renderChatText }

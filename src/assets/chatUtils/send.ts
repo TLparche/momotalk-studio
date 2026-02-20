@@ -8,8 +8,16 @@ const isSenseiOrStudent = (char: baseStudent | number) => {
     return char === 1 || typeof char !== 'number'
 }
 
+const normalizeText = (value: string) => {
+    return value
+        .replace(/\r\n/g, '\n')
+        .replace(/\u00a0/g, ' ')
+        .replace(/\n+$/g, '')
+}
+
 const sendText = (char: baseStudent | number, text: string, flag: number = 2) => {
-    if (text.length === 0) return
+    const normalizedText = normalizeText(text)
+    if (normalizedText.length === 0) return
     let name = ''
     let type = 0
     let avatar = ''
@@ -33,7 +41,7 @@ const sendText = (char: baseStudent | number, text: string, flag: number = 2) =>
         Avatar: avatar,
         type: type,
         flag: flag,
-        content: text
+        content: normalizedText
     }
     talkHistory.pushTalk(newTalk)
 
